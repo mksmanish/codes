@@ -1,0 +1,102 @@
+clear
+while :
+do 
+echo "------------------student database----------------";
+echo -e "1.inserting the record\n2.displaying the record\n3.searching the particular record\n4.modyfying the record\n5.deleting the record\n6.EXIT";
+echo -n "enter ur choice ";
+read ch;
+
+case $ch in 
+              1) touch file.txt;
+		 echo -n "nter the registration number ";
+		 read regn;
+		 if grep -q -w "^$regn" file.txt; then 
+		   echo "record already exist ";
+		 else 
+			echo -n "enter name ";
+			read name;
+			echo -n "enter branch ";
+			read branch;
+			echo -n "enter roll number ";
+			read roll;
+
+			echo -e "$regn\t\t$name\t\t$branch\t\t$roll" >>file.txt;
+		fi
+               ;;
+
+               2) touch gt.txt;
+		echo -e "regno.\t\tName\t\tBranch\t\tRollno." >gt.txt;
+		more file.txt >> gt.txt;
+		sort -nk 1 gt.txt;
+		echo " ";
+		;;
+
+		3) echo -n "enter the registration number to sreach "
+		read regn
+		if grep -q -w "^$regn" file.txt; then
+			    echo -e " Record Found\n"
+			    echo -e "regno.\t\tName\t\tBranch\t\tRollno."
+			    grep "^$regn" file.txt;
+
+		else 
+			    echo "record not found "
+		fi
+		;;
+
+		4) echo -n "enter the registration number  ";
+		read regn;
+		if grep -q -w "^$regn" file.txt; then
+				touch gtr.txt;
+				  grep -v "^$regn" file.txt > gtr.txt;
+				 mv gtr.txt file.txt;
+				echo "what u want to modify "
+				echo -e "1.Registration number\n2.Name\n3.Rollnumber\n4.Branch"
+				echo "enter ur choice "
+				read fg
+			     case $fg in 
+					1)     echo -n "enter the registration number ";
+							read regn;
+				       echo -e "$regn\t\t$name\t\t$branch\t\t$roll">>file.txt;
+
+					;;
+
+					2)    echo -n "enter name ";
+							read name;
+				                 echo -e "$regn\t\t$name\t\t$branch\t\t$roll">>file.txt;
+					;;
+					3)    echo -n "enter roll number ";
+							read roll;
+				            echo -e "$regn\t\t$name\t\t$branch\t\t$roll">>file.txt;
+					;;
+					4)    echo -n "enter branch ";
+							read branch;
+				         echo -e "$regn\t\t$name\t\t$branch\t\t$roll">>file.txt;
+					;;
+				         
+				        *) echo "wrong choice ";
+				          ;;
+				     esac
+			       z
+		  else 
+				echo "record not found ";
+		fi
+		;;
+
+
+		5) echo -n "enter the registration number  ";
+		read regn;
+		   if grep -q -w "^$regn" file.txt; then
+				 grep -v -e "^$regn" file.txt >> gty.txt;
+				  mv gty.txt file.txt
+				 echo "record deleted succesfully ";
+		  else 
+		         echo "record not found ";
+		fi
+		;;
+
+               6)  exit ;;
+
+             *) echo -n "wrong choice ";
+              ;;
+esac
+done
