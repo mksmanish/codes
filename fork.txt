@@ -1,0 +1,116 @@
+#include<stdio.h>
+#include<unistd.h>
+
+int partition(int a[],int low,int high)
+{
+	int i=low-1,j;
+	int temp;
+	int pivot=a[high];
+	for( j=low;j<=high-1;j++)
+	{
+		if(a[j]<=pivot)
+		{
+			i++;
+			temp=a[j];
+			a[j]=a[i];
+			a[i]=temp;
+		}
+	}
+	temp=a[i+1];
+	a[i+1]=a[high];
+	a[high]=temp;
+	return i+1;
+
+}
+void quicksort(int a[],int low,int high)
+{
+	if(low<high)
+	{
+		int p=partition(a,low,high);
+		quicksort(a,low,p-1);
+		quicksort(a,p+1,high);
+	}
+}
+
+void merge(int a[],int low,int mid,int high)
+{
+	int i,j,k;
+	int n1=mid-low+1;
+	int n2=high-mid;
+	int left[n1],right[n2];
+	for(i=0;i<n1;i++)
+	left[i]=a[low+i];
+	for(i=0;i<n2;i++)
+	right[i]=a[mid+1+i];
+	i=0;j=0;k=0;
+	while(i<n1&&j<n2)
+	{
+		if(left[i]<=right[j])
+		{
+			a[k+low]=left[i];
+			i++;
+		}
+		else
+		{
+			a[k+low]=right[j];
+			j++;
+		}
+		k++;
+	}
+	while(i<n1)
+	{
+		a[k+low]=left[i];
+		i++;
+		k++;
+	}
+	while(j<n2)
+	{
+		a[k+low]=right[j];
+		j++;
+		k++;
+	}
+}
+void mergesort(int a[],int low,int high)
+{
+	if(low<high)
+	{
+		int mid=(low+high)/2;
+		mergesort(a,low,mid);
+		mergesort(a,mid+1,high);
+		merge(a,low,mid,high);
+	}
+}
+int main()
+{
+    int a,size,i;
+    int b;
+    
+    printf("enter the no of elements of the array\n");
+    scanf("%d",&size);
+    int arr[size];
+    printf("enter the elements of the array\n");
+    for(i=0;i<size;i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+    b=fork();
+    if(b==0)
+    {
+        printf("/nby child process/n");
+        mergesort(arr,0,size-1);
+    }
+    else
+    {
+        sleep(1);
+        printf("by parent process/n");
+        quicksort(arr,0,size-1);
+    }
+    printf("\n");
+    printf("sorted array elements are\n");
+    for(i=0;i<size;i++)
+    {
+        printf("%d ",arr[i]);
+    }
+   system("ps -l");
+   printf("\n");
+}
