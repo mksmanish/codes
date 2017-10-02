@@ -4,6 +4,7 @@
 #include<semaphore.h>
 
 sem_t ch[5];
+sem_t room;
 void *phil(void *arg)
 {    
      int i=(int)arg;
@@ -13,6 +14,7 @@ void *phil(void *arg)
      left=i;
      right=(i+1)%5;
      printf("\n%d philosopher is hungry\n",i);
+     sem_wait(&room);
      sem_wait(&ch[left]);
      sem_wait(&ch[right]);
      printf("\n%d philosopher is eating\n",i);
@@ -20,12 +22,14 @@ void *phil(void *arg)
      sem_post(&ch[right]);
      sem_post(&ch[left]);
      printf("\n%d philosopher is completed\n",i);
+    sem_post(&room);
 }
 
 main()
 {
      pthread_t id[5];
      int i;
+     sem_init(&room,0,4);
      for(i=0;i<5;i++)
       {
            sem_init(&ch[i],0,1);

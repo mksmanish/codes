@@ -1,0 +1,77 @@
+#!/bin/bash
+clear
+
+
+while :
+do
+clear
+echo -e " 1. Create an address database \n 2. Search address  \n 3. Display address  \n 4. Insert a record \n 5. Delete Record \n 6. modify the record \n 7. Exit \n  "
+echo "Enter your choice "
+
+read choice 
+clear
+
+case $choice in
+1)
+echo "database created successfully"
+read -p "Enter the roll_no:" rno
+if grep -q -w $rno assg1.txt; then
+		echo "record allready exist"
+else
+	read -p "Enter the name:" name
+	read -p "Enter the address: " addr
+
+	echo "Entered the details successfully:"
+
+	echo "   $rno      $name         $addr " >> assg1.txt
+fi
+
+;;
+2)
+	echo "Enter a search contacts"
+	read -p "Enter the rollno " search
+	clear
+	echo "Roll_no---- NAME  ---address---" 
+	grep -i $search assg1.txt
+	
+;;
+3)	echo "Roll_no---- NAME  ---address----" 
+	cat assg1.txt
+;;
+4) 
+	read -p "Enter the roll_no:" rno
+	read -p "Enter the name:" name
+	read -p "Enter the address: " add
+	
+	echo "Entered the details successfully:"
+
+	echo "   $rno      $name         $add " >> assg1.txt
+
+	
+;;
+5)
+	read -p "Enter the name to delete the address(case - sensitive)" delete
+	sed -i -e "/$delete/d" assg1.txt
+	echo " DELETED SUCCESSFULY "
+;;
+6) 
+	cat assg1.txt
+	read -p "Enter the line no to modify" n1
+	read -p "Enter the new rollno" n8
+	read -p "Enter the new name:" n2
+	read -p "Enter the new Address:" n3
+ 	sed -i "$n1 s/.*/   $n8       $n2      $n3        /"  assg1.txt
+	echo "Updated SUCCESSFULLY"
+;;
+
+7)break
+;;
+*)
+	echo "Not valid"
+;;
+esac
+	read -p "Enter 6 to exit" exi
+if [$exi -eq "6"]
+then break
+fi
+done
